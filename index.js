@@ -30,6 +30,24 @@ async function run() {
         const db = client.db('plateShare_db');
         const usersCollection = db.collection('users');
 
+        // :::::::::::::::: Users related apis ::::::::::::::::
+
+        // Users Post API
+        app.post('/users', async (req, res) => {
+            const newUser = req.body;
+
+            const email = req.body.email;
+            const query = { email: email };
+            const existingUser = await usersCollection.findOne(query);
+            if (existingUser) {
+                res.send({ message: '⚡You already exist. Signed in successfully.' });
+            }
+            else {
+                const result = await usersCollection.insertOne(newUser);
+                res.send(result);
+            }
+        })
+
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     }
