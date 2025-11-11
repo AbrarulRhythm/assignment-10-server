@@ -5,9 +5,34 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 3000;
 
+const admin = require("firebase-admin");
+
+const serviceAccount = require("./plateshare-firebase-admin-key.json");
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+});
+
+
 // middleware
 app.use(cors());
 app.use(express.json());
+
+const verifyFireBaseToken = async (req, res, next) => {
+    const authorization = req.headers.authorization;
+    if (!authorization) {
+        return res.status(401).send({ message: 'unauthorized access' });
+    }
+    const token = authorization.split(' ')[1];
+    try {
+        const decoded = await admin.auth().verifyIdToken(token);
+        req.token_email = decoded.email;
+        next();
+    }
+    catch (error) {
+        return res.status(401).send({ message: 'unauthorized access' });
+    }
+}
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.qrthjko.mongodb.net/?appName=Cluster0`;
 
@@ -29,6 +54,7 @@ async function run() {
 
         const db = client.db('plateShare_db');
         const usersCollection = db.collection('users');
+        const foodsCollection = db.collection('foods');
 
         // :::::::::::::::: Users related apis ::::::::::::::::
 
@@ -46,6 +72,15 @@ async function run() {
                 const result = await usersCollection.insertOne(newUser);
                 res.send(result);
             }
+        })
+
+        // :::::::::::::::: Foods related apis ::::::::::::::::
+
+        // Food Post API
+        app.post('/foods', verifyFireBaseToken, async (req, res) => {
+            const newFood = req.body;
+            const result = await foodsCollection.insertOne(newFood);
+            res.send(result);
         })
 
         await client.db("admin").command({ ping: 1 });
