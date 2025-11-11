@@ -91,6 +91,24 @@ async function run() {
             res.send(result);
         })
 
+        // Get API for all foods
+        app.get('/my-foods', verifyFireBaseToken, async (req, res) => {
+            const email = req.query.email;
+            const query = {};
+
+            if (email) {
+                if (email !== req.token_email) {
+                    return res.status(403).send({ message: 'unauthorized access' });
+                }
+
+                query.donatorEmail = email;
+            }
+
+            const cursor = foodsCollection.find(query).sort({ foodQuantity: -1 });
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+
         // Get API for Featured Foods
         app.get('/featured-foods', async (req, res) => {
             const query = { foodStatus: 'Available' };
