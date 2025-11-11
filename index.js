@@ -91,6 +91,14 @@ async function run() {
             res.send(result);
         })
 
+        // Get API for Featured Foods
+        app.get('/featured-foods', async (req, res) => {
+            const query = { foodStatus: 'Available' };
+            const cursor = foodsCollection.find(query).sort({ foodQuantity: -1 }).limit(6);
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     }
