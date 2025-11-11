@@ -138,7 +138,7 @@ async function run() {
         })
 
         // Delete API
-        app.delete('/foods/:id', async (req, res) => {
+        app.delete('/foods/:id', verifyFireBaseToken, async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
             const result = await foodsCollection.deleteOne(query);
