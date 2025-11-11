@@ -55,6 +55,7 @@ async function run() {
         const db = client.db('plateShare_db');
         const usersCollection = db.collection('users');
         const foodsCollection = db.collection('foods');
+        const foodRequestCollection = db.collection('foodRequest');
 
         // :::::::::::::::: Users related apis ::::::::::::::::
 
@@ -142,6 +143,15 @@ async function run() {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
             const result = await foodsCollection.deleteOne(query);
+            res.send(result);
+        })
+
+        // :::::::::::::::: Food Request related apis ::::::::::::::::
+
+        // Food Request Post API
+        app.post('/food-request', verifyFireBaseToken, async (req, res) => {
+            const newFoodRequest = req.body;
+            const result = await foodRequestCollection.insertOne(newFoodRequest);
             res.send(result);
         })
 
