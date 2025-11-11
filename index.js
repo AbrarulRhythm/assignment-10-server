@@ -125,6 +125,18 @@ async function run() {
             res.send(result);
         })
 
+        // Patch API
+        app.patch('/foods/:id', verifyFireBaseToken, async (req, res) => {
+            const id = req.params.id;
+            const updateFood = req.body;
+            const query = { _id: new ObjectId(id) };
+            const update = {
+                $set: updateFood
+            }
+            const result = await foodsCollection.updateOne(query, update);
+            res.send(result);
+        })
+
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     }
