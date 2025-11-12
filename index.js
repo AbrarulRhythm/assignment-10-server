@@ -156,8 +156,19 @@ async function run() {
         })
 
         // Get API
-        app.get('/food-request', verifyFireBaseToken, async (req, res) => {
-            const cursor = foodRequestCollection.find();
+        app.get('/food-request', async (req, res) => {
+            const foodId = req.query.id;
+            const email = req.query.email;
+            const query = {};
+
+            if (foodId) {
+                query.foodId = foodId;
+            }
+            if (email) {
+                query.requesterEmail = email;
+            }
+
+            const cursor = foodRequestCollection.find(query);
             const result = await cursor.toArray();
             res.send(result);
         })
