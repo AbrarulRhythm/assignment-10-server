@@ -138,6 +138,20 @@ async function run() {
             res.send(result);
         })
 
+        // Patch API form food status
+        app.patch('/food-status/:id', verifyFireBaseToken, async (req, res) => {
+            const id = req.params.id;
+            const updateFoodStatus = req.body;
+            const query = { _id: new ObjectId(id) };
+            const update = {
+                $set: {
+                    foodStatus: updateFoodStatus.foodStatus
+                }
+            }
+            const result = await foodsCollection.updateOne(query, update);
+            res.send(result);
+        })
+
         // Delete API
         app.delete('/foods/:id', verifyFireBaseToken, async (req, res) => {
             const id = req.params.id;
@@ -156,7 +170,7 @@ async function run() {
         })
 
         // Get API
-        app.get('/food-request', async (req, res) => {
+        app.get('/food-request', verifyFireBaseToken, async (req, res) => {
             const foodId = req.query.id;
             const email = req.query.email;
             const query = {};
@@ -170,6 +184,20 @@ async function run() {
 
             const cursor = foodRequestCollection.find(query);
             const result = await cursor.toArray();
+            res.send(result);
+        })
+
+        // Patch API
+        app.patch('/food-request/:id', verifyFireBaseToken, async (req, res) => {
+            const id = req.params.id;
+            const updateFoodRequest = req.body;
+            const query = { _id: new ObjectId(id) };
+            const update = {
+                $set: {
+                    status: updateFoodRequest.status,
+                }
+            }
+            const result = await foodRequestCollection.updateOne(query, update);
             res.send(result);
         })
 
