@@ -201,6 +201,14 @@ async function run() {
             res.send(result);
         })
 
+        // Food Request Delete API
+        app.delete('/food-request/:id', verifyFireBaseToken, async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await foodRequestCollection.deleteOne(query);
+            res.send(result);
+        })
+
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     }
