@@ -1,4 +1,4 @@
-# 🍽️ PlateShare Server
+# ASSIGNMENT-010 (**🍽️ PlateShare Server** – Community Food Sharing)
 
 This is the **backend server** for the PlateShare food donation platform.  
 It handles user authentication, food management, and food request operations.
