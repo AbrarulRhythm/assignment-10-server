@@ -1,4 +1,4 @@
-# ASSIGNMENT-010 - Server (**PlateShare** – Community Food Sharing)
+# 🍽️ PlateShare Server
 
 This is the **backend server** for the PlateShare food donation platform.  
 It handles user authentication, food management, and food request operations.
@@ -19,6 +19,10 @@ It handles user authentication, food management, and food request operations.
 - **CORS** – Cross-origin resource sharing
 - **Axios** – For API requests (client-side integration)
 - **dotenv** – Environment variable management
+
+## 🔗 Client Repository
+The frontend for PlateShare is available here:  
+[PlateShare Client Repo](https://github.com/AbrarulRhythm/assignment-10-client)
 
 ---
 
