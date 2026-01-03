@@ -82,6 +82,8 @@ async function run() {
         // Food Post API
         app.post('/foods', verifyFireBaseToken, async (req, res) => {
             const newFood = req.body;
+            newFood.created_at = new Date();
+
             const result = await foodsCollection.insertOne(newFood);
             res.send(result);
         })
